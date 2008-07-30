@@ -15,9 +15,10 @@ cg.ENABLE_CALLBACK = False
 GRAY = (0.5,0.5,0.5)
 
 class Cell(gtk.DrawingArea):
-    def __init__(self,idx,value,width=64,height=64):
+    def __init__(self,idx,value,active=False,width=64,height=64):
         self.idx = idx
         self.value = str(value)
+        self.active = active
         gtk.DrawingArea.__init__(self)
         self.connect("expose-event",self.on_expose)
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.ENTER_NOTIFY_MASK | gtk.gdk.LEAVE_NOTIFY_MASK)
@@ -44,6 +45,8 @@ class Cell(gtk.DrawingArea):
         gtk.gdk.window_process_all_updates()
 
     def on_mouse_over(self,widget,event):
+        if self.value == '0' or not self.active:
+            return
         self.fg = (0,0,0)
         self.queue_draw()
 
@@ -79,7 +82,7 @@ class GUI(object):
         self.buttons = []
         self.bot_row = gtk.HBox()
         for i in range(6):
-            btn = Cell(i,'4')
+            btn = Cell(i,'4',active=True)
             btn.callback = self.user_clicked
             self.buttons.append(btn)
             self.bot_row.pack_start(btn,expand=True)
