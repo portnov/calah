@@ -2,6 +2,7 @@
 
 import sys
 import time
+from getopt import getopt
 
 import gtk
 import gtk.gdk
@@ -73,7 +74,8 @@ class Cell(gtk.DrawingArea):
         cr.show_text(self.value)
 
 class GUI(object):
-    def __init__(self):
+    def __init__(self,n):
+        self.n = n
         self.window = gtk.Window()
         self.window.set_title('Calah')
         self.big = gtk.HBox()
@@ -132,6 +134,8 @@ class GUI(object):
         else:
             self.show("Comp win.")
         self.stop = True
+        self.window.window.set_cursor(None)
+        self.window.window.process_updates(True)
 #         gtk.main_quit()
 #         sys.exit()
 
@@ -196,9 +200,9 @@ class GUI(object):
             self.show_new("Comp is thinking...")
             self.info.queue_draw()
             self.window.window.process_updates(True)
-            self.pos.estimate_moves()
+            self.pos.estimate_moves(self.n)
             try:
-                n = self.pos.best_move()
+                n = self.pos.best_move(moves=self.n)
             except HaveNotMoves:
                 self.show_new("Comp has not moves.")
                 self.end_game(self.pos)
@@ -213,5 +217,14 @@ class GUI(object):
         time.sleep(1)
         self.show_new("Your turn.")
 
-g = GUI()
+opts,args = getopt(sys.argv[1:], 'n:h')
+opts = dict(opts)
+if 'h' in opts:
+    print "Synopsis: calah.py [-n number]"
+    print "  -n number   - Specify number of moves to calculate. By default, 5."
+    sys.exit()
+
+n = opts.get('n', 5)
+
+g = GUI(n)
 gtk.main()
