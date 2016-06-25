@@ -217,14 +217,14 @@ class GUI(object):
         time.sleep(1)
         self.show_new("Your turn.")
 
-opts,args = getopt(sys.argv[1:], 'n:h')
+opts,args = getopt(sys.argv[1:], 'n:eh')
 opts = dict(opts)
 if 'h' in opts:
     print "Synopsis: calah.py [-n number]"
     print "  -n number   - Specify number of moves to calculate. By default, 5."
     sys.exit()
 
-n = opts.get('n', 5)
+n = int(opts.get('-n',5))
 
 g = GUI(n)
 gtk.main()

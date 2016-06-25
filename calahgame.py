@@ -78,8 +78,8 @@ class CPosition(Position):
             self.calah_hum = 0
         self.all = Cells(self)
 
-#     def estimate(self,lst):
-#         return [1 for p in lst]
+    def estimate(self,lst):
+        return [1 for p in lst]
     
     def __repr__(self):
         if self.comp:
@@ -114,7 +114,7 @@ class CPosition(Position):
         return [i for i,n in e if n > 0]
 
     def move(self,s):
-        new = CPosition(self)
+        new = CPosition(base=self)
         new.comp = self.comp
         all = Cells(new)
         all,comp = self.move_real(all,s)
